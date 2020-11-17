@@ -1,4 +1,4 @@
 package ir.blog.mahdidavoodi;
 
-public interface Products {
+public class TestProducts {
 }

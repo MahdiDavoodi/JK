@@ -1,4 +1,4 @@
 package ir.blog.mahdidavoodi;
 
-public class File {
+public class Purchase {
 }

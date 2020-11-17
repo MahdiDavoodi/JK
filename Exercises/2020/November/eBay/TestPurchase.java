@@ -1,5 +1,4 @@
 package ir.blog.mahdidavoodi;
 
-public class TestAmazon {
-
+public class TestPurchase {
 }
