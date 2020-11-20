@@ -20,10 +20,34 @@ public class TestUserManagement {
         assertFalse(userManagement.emailChecker("Google"));
         assertFalse(userManagement.emailChecker("Google@@dd.com"));
     }
+
+    @Test
+    public void testLoginUser() {
+        assertTrue(userManagement.loginUser("Admin@admin.com", "G[]123%^"));
+        assertFalse(userManagement.loginUser("Admin", "G[]123%^"));
+    }
+
+    @Test
+    public void testEditWalletBalance() {
+        assertTrue(userManagement.loginUser("Admin@admin.com", "G[]123%^"));
+        assertFalse(userManagement.loginUser("Admin", "G[]123%^"));
+        assertEquals(userManagement.editWalletBalance(0), 202020);
+    }
+
+    @Test
+    public void testRemoveUser() {
+        assertTrue(userManagement.loginUser("Admin@admin.com", "G[]123%^"));
+        assertFalse(userManagement.loginUser("Admin", "G[]123%^"));
+        assertTrue(userManagement.removeUser());
+    }
+
     @Test
     public void testCreateUser() {
-        assertTrue(userManagement.createUser("Google@gmail.com", "G[]123%^", "Google"));
-        assertFalse(userManagement.createUser("Google", "G[]123%^", "Google"));
+        assertTrue(userManagement.loginUser("Admin@admin.com", "G[]123%^"));
+        assertFalse(userManagement.loginUser("Admin", "G[]123%^"));
+        assertTrue(userManagement.removeUser());
+        assertTrue(userManagement.createUser("Admin@admin.com", "G[]123%^", "Admin", 202020));
+        assertFalse(userManagement.createUser("Google", "G[]123%^", "Google", 202020));
     }
 
 }

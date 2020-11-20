@@ -5,14 +5,14 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileNotFoundException;
+
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class UserManagement {
-    static class User {
+    protected static class User {
         private String email;
         private long password;
         private String name;
@@ -55,9 +55,9 @@ public class UserManagement {
         loadUsersData("UsersData.json");
     }
 
-    protected ArrayList<User> users;
-    protected boolean userLoggedIn = false;
-    protected String currentUserEmail = "";
+    protected static ArrayList<User> users = new ArrayList<>();
+    protected static boolean userLoggedIn = false;
+    protected static String currentUserEmail = "";
 
     protected void loadUsersData(String pathname) {
         try {
@@ -85,13 +85,13 @@ public class UserManagement {
             for (User user :
                     users) {
                 JSONObject jsonObject = new JSONObject();
+                jsonObject.put("email", user.getEmail());
                 jsonObject.put("name", user.getName());
                 jsonObject.put("password", user.getPassword());
                 jsonObject.put("walletBalance", user.getWalletBalance());
 
-                JSONObject jsonFatherObject = new JSONObject();
-                jsonFatherObject.put(user.getEmail(), jsonObject);
-                usersList.add(jsonFatherObject);
+
+                usersList.add(jsonObject);
             }
             writer.write(usersList.toJSONString());
             writer.close();
@@ -113,7 +113,7 @@ public class UserManagement {
         return false;
     }
 
-    protected boolean createUser(String email, String password, String name) {
+    protected boolean createUser(String email, String password, String name, int walletBalance) {
         for (User user :
                 users) {
             if (user.getEmail().equalsIgnoreCase(email)) return false;
@@ -123,34 +123,33 @@ public class UserManagement {
             newUser.setEmail(email);
             newUser.setPassword(passwordHash(password));
             newUser.setName(name);
+            newUser.setWalletBalance(walletBalance);
             users.add(newUser);
-            saveUsersData("UsersData.json");
             return true;
-        } else return false;
+        }
+        return false;
     }
 
     protected boolean removeUser() {
         if (userLoggedIn) {
             users.removeIf(user -> user.getEmail().equalsIgnoreCase(currentUserEmail));
-            saveUsersData("UsersData.json");
             userLoggedIn = false;
             return true;
         }
         return false;
     }
 
-    protected boolean editWalletBalance(int difference) {
+    protected static int editWalletBalance(int difference) {
         if (userLoggedIn) {
             for (User user :
                     users) {
                 if (user.getEmail().equalsIgnoreCase(currentUserEmail)) {
                     user.setWalletBalance(user.getWalletBalance() + difference);
-                    saveUsersData("UsersData.json");
-                    return true;
+                    return user.getWalletBalance();
                 }
             }
         }
-        return false;
+        return 0;
     }
 
     protected long passwordHash(String password) {
