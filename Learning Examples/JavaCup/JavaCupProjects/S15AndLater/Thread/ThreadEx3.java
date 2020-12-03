@@ -1,7 +1,7 @@
 package ir.blog.mahdidavoodi;
 
 /*
- * A simple example too see how Thread works!
+ * A simple example to see how Thread works!
  * */
 public class ThreadEx3 {
     public static void main(String[] args) {
