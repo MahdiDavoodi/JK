@@ -1,24 +1,32 @@
-import java.io.*;
-import java.math.*;
-import java.security.*;
-import java.text.*;
 import java.util.*;
-import java.util.concurrent.*;
-import java.util.regex.*;
 
 public class Solution {
 
     static void insertionSort1(int n, int[] arr) {
         int theNumber = arr[n - 1];
-        for (int i = arr.length - 2; i >= 0; i--) {
-            if (arr[i] > theNumber) arr[i + 1] = arr[i];
-            else arr[i + 1] = theNumber;
-            for (int number :
-                    arr) {
-                System.out.print(number + " ");
+        int i;
+        for (i = arr.length - 2; i >= 0; i--) {
+            if (arr[i] > theNumber) {
+                arr[i + 1] = arr[i];
+            } else {
+                arr[i + 1] = theNumber;
+                printArray(arr);
+                break;
             }
-            System.out.print("\n");
+            printArray(arr);
         }
+        if (i + 1 == 0) {
+            arr[i + 1] = theNumber;
+            printArray(arr);
+        }
+    }
+
+    static void printArray(int[] array) {
+        for (int number :
+                array) {
+            System.out.print(number + " ");
+        }
+        System.out.print("\n");
     }
 
     private static final Scanner scanner = new Scanner(System.in);
