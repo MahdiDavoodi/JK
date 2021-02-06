@@ -1,0 +1,92 @@
+/*
+ * An example for LinkedList.
+ * This is my linked List.
+ * */
+public class MySinglyLinkedList<T> {
+    protected static class Node<T> {
+        private T element;
+        private Node<T> next;
+
+        public Node(T element, Node<T> next) {
+            this.element = element;
+            this.next = next;
+        }
+
+        public void setNext(Node<T> next) {
+            this.next = next;
+        }
+
+        public T getElement() {
+            return element;
+        }
+
+        public Node<T> getNext() {
+            return next;
+        }
+    }
+
+    private Node<T> head = null;
+    private Node<T> tail = null;
+    private int size = 0;
+
+    public MySinglyLinkedList() {
+    }   // Create an empty list.
+
+    public int getSize() {
+        return size;
+    }
+
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    public T first() {
+        if (isEmpty()) return null;
+        else return head.getElement();
+    }   // Return first element.
+
+    public T last() {
+        if (isEmpty()) return null;
+        else return tail.getElement();
+    }   // Return last element.
+
+    public void addFirst(T element) {
+        head = new Node<>(element, head);
+        if (size == 0) tail = head;
+        size++;
+    }
+
+    public void addLast(T element) {
+        Node<T> newest = new Node<>(element, null);
+        if (isEmpty()) head = newest;
+        else tail.setNext(newest);
+        tail = newest;
+        size++;
+    }
+
+    public void removeFirst() {
+        if (!isEmpty()) {
+            head = head.getNext();
+            size--;
+            if (size == 0) tail = null;
+        }
+    }
+
+    public Node<T> get(int index) {
+        Node<T> current = head;
+        for (int i = 0; i < size; i++) {
+            if (i == index) return current;
+            else current = current.getNext();
+        }
+        return current;
+    }
+
+    public T getElement(int index) {
+        Node<T> current = head;
+        for (int i = 0; i < size; i++) {
+            if (i == index) return current.getElement();
+            else current = current.getNext();
+        }
+        return current.getElement();
+    }
+}
