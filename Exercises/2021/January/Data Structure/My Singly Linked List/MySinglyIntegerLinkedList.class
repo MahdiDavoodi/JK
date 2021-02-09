@@ -1,0 +1,185 @@
+/*
+ * An example for LinkedList.
+ * This is my linked List.(That works with integer.)
+ * I 'll write the main(Generic) class later.
+ * */
+public class MySinglyIntegerLinkedList {
+
+    protected static class Node {
+        private final int element;
+        private Node next;
+
+        public Node(int element, Node next) {
+            this.element = element;
+            this.next = next;
+        }
+
+        public void setNext(Node next) {
+            this.next = next;
+        }
+
+        public int getElement() {
+            return element;
+        }
+
+        public Node getNext() {
+            return next;
+        }
+
+        public boolean isEqualElements(int element) {
+            return this.element == element;
+        }
+
+    }
+
+    private Node head = null;
+    private Node tail = null;
+    private int size = 0;
+
+    public MySinglyIntegerLinkedList() {
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public Node getNode(int index) {
+        Node current = head;
+        for (int i = 0; i < size; i++) {
+            if (i == index) return current;
+            else current = current.getNext();
+        }
+        return null;
+    }
+
+    public int get(int index) {
+        if (index == 0) return getFirst();
+        else if (index == size - 1) return getLast();
+        else if (index > 0 && index < size - 1) {
+            Node current = head;
+            for (int i = 0; i < size; i++) {
+                if (i == index) return current.getElement();
+                else current = current.getNext();
+            }
+        }
+
+        return 0;
+    }
+
+    public int getFirst() {
+        if (isEmpty()) return 0;
+        else return head.getElement();
+    }   // Return first element.
+
+    public int getLast() {
+        if (isEmpty()) return 0;
+        else return tail.getElement();
+    }   // Return last element.
+
+    public int[] getAll() {
+        int[] allElements = new int[size];
+        Node current = head;
+        for (int i = 0; i < size; i++) {
+            allElements[i] = current.getElement();
+            current = current.getNext();
+        }
+        return allElements;
+    }
+
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    public void addFirst(int element) {
+        head = new Node(element, head);
+        if (size == 0) tail = head;
+        size++;
+    }
+
+    public void addLast(int element) {
+        if (isEmpty()) {
+            addFirst(element);
+        } else {
+            Node newNode = new Node(element, null);
+            size++;
+            if (isEmpty()) head = newNode;
+            else tail.setNext(newNode);
+            tail = newNode;
+        }
+    }
+
+    public void add(int element) {
+        addLast(element);
+    }
+
+    public void add(int element, int index) {
+        if (isEmpty() || index == 0) {
+            addFirst(element);
+        } else {
+            if (index > 0 && index < size - 1) {
+
+                Node current = head;
+                for (int i = 1; i < index; i++) {
+                    current = current.getNext();
+                }
+                Node newNode = new Node(element, current.getNext());
+                current.setNext(newNode);
+                size++;
+
+            } else add(element);
+        }
+
+    }
+
+    public void removeFirst() {
+        if (!isEmpty()) {
+            head = head.getNext();
+            size--;
+            if (size == 0) tail = null;
+        }
+    }
+
+    public void removeLast() {
+        if (size > 1) {
+            Node current = head;
+            int tailIndex = size - 1;
+            for (int i = 1; i < tailIndex; i++) {
+                current = current.getNext();
+            }
+            tail = current;
+            current.setNext(null);
+            size--;
+        }
+    }
+
+    public void remove(int index) {
+        if (index == 0) removeFirst();
+        else if (index == size - 1) removeLast();
+        else if (index > 0 && index < size - 1) {
+            Node current = head;
+            for (int i = 1; i < index; i++) {
+                current = current.getNext();
+            }
+            current.setNext(current.getNext().getNext());
+            size--;
+        }
+    }
+
+    public boolean contains(int element) {
+        Node node = head;
+        for (int i = 0; i < size; i++) {
+            if (node.isEqualElements(element)) return true;
+            node = node.getNext();
+        }
+        return false;
+    }
+
+    public void printAll() {
+        int[] all = getAll();
+        for (int integer :
+                all) {
+            System.out.println(integer);
+        }
+    }
+
+}
