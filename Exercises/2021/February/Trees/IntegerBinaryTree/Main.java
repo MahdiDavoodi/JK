@@ -14,8 +14,12 @@ public class Main {
         tree.add(1);
 
         tree.printArray();
+        tree.printMirror();
+        tree.printArray();
+
         tree.printAllSorted();
         tree.printAllLeftSide();
+        tree.printAllLeftSideLook();
 
         System.out.println("---> Size should be 7: " + tree.numberOfElements());
         System.out.println("---> Depth should be 3: " + tree.depth());
@@ -26,8 +30,9 @@ public class Main {
         System.out.println("---> Depth should be 2 right now: " + tree.depth());
         System.out.println("---> Root should be 20: " + tree.getRoot());
         tree.remove(20);
+        tree.printArray();
         System.out.println("---> We removed root, so the size should be 5: " + tree.numberOfElements());
-        System.out.println("---> Depth should be 1: " + tree.depth());
+        System.out.println("---> Depth should be 3: " + tree.depth());
 
         System.out.println("---> The highest number is 30: " + (tree.highestNumber() == 30));
         System.out.println("---> The lowest number is 5: " + (tree.lowestNumber() == 5));

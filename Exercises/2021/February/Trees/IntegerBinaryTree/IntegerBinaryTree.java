@@ -1,6 +1,6 @@
 package ir.blog.mahdidavoodi;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 /*
  * My Integer Binary Tree.
@@ -52,7 +52,7 @@ public class IntegerBinaryTree {
     }
 
     private Node root;
-    private int size = 0, depth = 0;
+    private int size = 0;
 
     // Constructor.
     public IntegerBinaryTree() {
@@ -79,16 +79,13 @@ public class IntegerBinaryTree {
 
     // Add.
     public void add(Integer element) {
-        Node newNode;
-        if (isEmpty()) {
-            root.setElement(element);
-            newNode = root;
-        } else {
-            newNode = add(root, element);
-        }
-        size++;
-        this.depth = Math.max(this.depth, depth(newNode));
 
+        if (isEmpty())
+            root.setElement(element);
+        else
+            add(root, element);
+
+        size++;
     }
 
     private Node add(Node node, Integer element) {
@@ -150,6 +147,7 @@ public class IntegerBinaryTree {
     }
 
     public void printArray() {
+        System.out.println("----> Tree: ");
         Integer[] array = toArray();
         int limit = 1, counter = 0;
         for (Integer integer : array) {
@@ -174,6 +172,33 @@ public class IntegerBinaryTree {
             } else break;
         }
         System.out.println();
+    }
+
+    public void printAllLeftSideLook() {
+        // When you look at tree from the left side of it.
+        System.out.println("----> When you look at tree from the left side of it:");
+        Integer[] array = toArray();
+        int limit = 1, counter = 0, counter2 = 0;
+        for (Integer integer : array) {
+            counter++;
+            if (integer != null && counter2 < 1) {
+                System.out.print(" ," + integer);
+                counter2++;
+            }
+            if (counter == limit) {
+                counter = 0;
+                counter2 = 0;
+                limit = limit * 2;
+            }
+        }
+        System.out.println();
+    }
+
+    public void printMirror() {
+        System.out.println("----> Mirror tree: ");
+        switchLeftAndRight(root);
+        printArray();
+        switchLeftAndRight(root);
     }
 
     // Contains.
@@ -213,19 +238,9 @@ public class IntegerBinaryTree {
                 } else root.setElement(null);
 
 
-                size--;
-                if (depth != 0) depth--;
+            } else remove(root, element);
 
-            } else {
-                Node removedNode;
-                removedNode = remove(root, element);
-                size--;
-                if (depth == depth(removedNode)) {
-                    assert removedNode != null;
-                    depth = depth(removedNode.getParent());
-                }
-
-            }
+            size--;
         }
     }
 
@@ -284,6 +299,15 @@ public class IntegerBinaryTree {
 
     // Depth.
     public int depth() {
+        return depth(leaves());
+    }
+
+    private int depth(LinkedList<Node> leaves) {
+        int depth = 0;
+        for (Node leaf :
+                leaves) {
+            depth = Math.max(depth, depth(leaf));
+        }
         return depth;
     }
 
@@ -313,25 +337,30 @@ public class IntegerBinaryTree {
         return temp.getElement();
     }
 
-    // Number of leaves.
-    public int numberOfLeaves() {
-        if (isEmpty()) return 0;
-        return numberOfLeaves(root);
+    // Leaves.
+    public LinkedList<Node> leaves() {
+        if (isEmpty()) return null;
+        LinkedList<Node> leaves = new LinkedList<>();
+        leaves(root, leaves);
+        return leaves;
     }
 
-    private int numberOfLeaves(Node node) {
-        int counter = 0;
-        if (node.getLeft() == null && node.getRight() == null) return 1;
+    private void leaves(Node node, LinkedList<Node> leaves) {
+        if (node.getLeft() == null && node.getRight() == null) leaves.add(node);
         else {
-            if (node.getLeft() != null) counter = counter + numberOfLeaves(node.getLeft());
-            if (node.getRight() != null) counter = counter + numberOfLeaves(node.getRight());
-            return counter;
+            if (node.getLeft() != null) leaves(node.getLeft(), leaves);
+            if (node.getRight() != null) leaves(node.getRight(), leaves);
         }
+    }
+
+    public int numberOfLeaves() {
+        if (isEmpty()) return 0;
+        return leaves().size();
     }
 
     // To list.
     public Integer[] toArray() {
-        Integer[] array = new Integer[(int) Math.pow(depth, 3)];
+        Integer[] array = new Integer[(int) Math.pow(depth(), 3)];
         array[0] = root.getElement();
         toArray(root, array, 0);
         return array;
@@ -347,6 +376,17 @@ public class IntegerBinaryTree {
             int newIndex = (lastIndex * 2) + 2;
             array[newIndex] = node.getRight().getElement();
             toArray(node.getRight(), array, newIndex);
+        }
+    }
+
+    // Switch left and right.
+    private void switchLeftAndRight(Node node) {
+        if (node.getLeft() != null || node.getRight() != null) {
+            Node temp = node.getLeft();
+            node.setLeft(node.getRight());
+            node.setRight(temp);
+            if (node.getLeft() != null) switchLeftAndRight(node.getLeft());
+            if (node.getRight() != null) switchLeftAndRight(node.getRight());
         }
     }
 }
