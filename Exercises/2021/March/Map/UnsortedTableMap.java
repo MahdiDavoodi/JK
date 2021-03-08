@@ -1,6 +1,8 @@
 package ir.blog.mahdidavoodi;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class UnsortedTableMap<K, V> extends AbstractMap<K, V> {
     private final ArrayList<MapEntry<K, V>> table = new ArrayList<>();
@@ -45,5 +47,33 @@ public class UnsortedTableMap<K, V> extends AbstractMap<K, V> {
     @Override
     public int size() {
         return table.size();
+    }
+
+    private class EntryIterator implements Iterator<Entry<K, V>> {
+
+        private int n = 0;
+
+        @Override
+        public boolean hasNext() {
+            return n < table.size();
+        }
+
+        @Override
+        public Entry<K, V> next() {
+            if (n == table.size()) throw new NoSuchElementException();
+            return table.get(n++);
+        }
+    }
+
+    private class EntryIterable implements Iterable<Entry<K, V>> {
+        @Override
+        public Iterator<Entry<K, V>> iterator() {
+            return new EntryIterator();
+        }
+    }
+
+    @Override
+    public Iterable<Entry<K, V>> entrySet() {
+        return new EntryIterable();
     }
 }
