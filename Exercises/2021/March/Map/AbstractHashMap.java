@@ -46,12 +46,7 @@ public abstract class AbstractHashMap<K, V> extends AbstractMap<K, V> {
     public int size() {
         return size;
     }
-
-    @Override
-    public Iterable<Entry<K, V>> entrySet() {
-        return null;
-    }
-
+    
     private int hashValue(K key) {
         return (int) ((Math.abs(key.hashCode() * scale + shift) % prime) % capacity);
     }
