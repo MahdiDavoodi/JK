@@ -6,7 +6,8 @@ import java.util.Scanner;
  * Longest Common Subsequence!
  * Thanks to:
  * ---> https://www.youtube.com/watch?v=ASoaQq66foQ
- * ---> https://www.geeksforgeeks.org/longest-common-subsequence-dp-4/*/
+ * ---> https://www.geeksforgeeks.org/longest-common-subsequence-dp-4/
+ */
 public class LCS {
 
     static int lcs(char[] X, char[] Y, int xLength, int yLength) {
