@@ -62,4 +62,24 @@ class AdjacencyMapGraphTest {
         assertEquals(2, graph.numberOfEdges());
         assertEquals(3, graph.numberOfVertices());
     }
+
+    @Test
+    void find() {
+        addToGraph();
+        assertTrue(graph.contains("Istanbul"));
+        assertFalse(graph.contains("Hello"));
+    }
+
+    @Test
+    void NumberOfTrees() {
+        Vertex<String> istanbul = graph.insertVertex("Istanbul");
+        Vertex<String> newYork = graph.insertVertex("New York");
+        Vertex<String> tehran = graph.insertVertex("Tehran");
+        Vertex<String> berlin = graph.insertVertex("Berlin");
+        Vertex<String> tokyo = graph.insertVertex("Tokyo");
+        graph.insertEdge(istanbul, newYork, 150);
+        graph.insertEdge(berlin, tehran, 40);
+
+        assertEquals(3, graph.numberOfSpanningTrees(graph));
+    }
 }

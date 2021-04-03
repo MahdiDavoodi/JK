@@ -1,7 +1,9 @@
 package Mahdi.Davoodi;
 
+import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Stack;
 
 /*
  * My Graph - created with Hash Map.
@@ -256,5 +258,58 @@ public class AdjacencyMapGraph<V, E> implements Graph<V, E> {
                 }
             currentLevel = nextLevel;
         }
+    }
+
+    public void printAllVertices() {
+        for (Vertex<V> vertex :
+                vertices) {
+            System.out.print(vertex.getElement() + " - ");
+        }
+    }
+
+    public boolean contains(V element) {
+        for (Vertex<V> vertex :
+                vertices) {
+            if (vertex.getElement().equals(element))
+                return true;
+        }
+        return false;
+    }
+
+    public int numberOfSpanningTrees(Graph<V, E> graph) {
+        int totalSpTree = 1;
+        Set<Vertex<V>> discoveredVertices = new HashSet<>();
+        Map<Vertex<V>, Edge<E>> forest = new ProbeHashMap<>();
+        for (Vertex<V> vertex :
+                vertices) {
+            if (!discoveredVertices.contains(vertex)) {
+                DFS(graph, vertex, discoveredVertices, forest);
+                if (discoveredVertices.size() < vertices.size()) totalSpTree++;
+            }
+        }
+        return totalSpTree;
+    }
+
+    public static <V, E> PositionalList<Vertex<V>> topologicalSort(Graph<V, E> graph) {
+        PositionalList<Vertex<V>> result = new LinkedPositionalList<>();
+        Stack<Vertex<V>> ready = new Stack<>();
+
+        Map<Vertex<V>, Integer> inCount = new ProbeHashMap<>();
+        for (Vertex<V> vertex : graph.vertices()) {
+            inCount.put(vertex, graph.inDegree(vertex));
+            if (inCount.get(vertex) == 0)
+                ready.push(vertex);
+        }
+        while (!ready.isEmpty()) {
+            Vertex<V> vertex = ready.pop();
+            result.addLast(vertex);
+            for (Edge<E> edge : graph.outgoingEdges(vertex)) {
+                Vertex<V> across = graph.opposite(vertex, edge);
+                inCount.put(across, inCount.get(across) - 1);
+                if (inCount.get(across) == 0)
+                    ready.push(across);
+            }
+        }
+        return result;
     }
 }
