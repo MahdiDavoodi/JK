@@ -1,5 +1,8 @@
 package Mahdi.Davoodi;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /*
  * My Graph - created with Hash Map.
  * Thanks to Michael T. Goodrich!
@@ -206,5 +209,52 @@ public class AdjacencyMapGraph<V, E> implements Graph<V, E> {
     private InnerEdge<E> validate(Edge<E> edge) {
         if (!(edge instanceof InnerEdge)) throw new IllegalArgumentException("Invalid edge");
         return (InnerEdge<E>) edge;
+    }
+
+
+    // My Graph Algorithms
+
+    public static <V, E> void DFS(Graph<V, E> graph,
+                                  Vertex<V> vertex,
+                                  Set<Vertex<V>> discoveredVertices,
+                                  Map<Vertex<V>, Edge<E>> forest) {
+        discoveredVertices.add(vertex);
+        for (Edge<E> edge : graph.outgoingEdges(vertex)) {
+            Vertex<V> across = graph.opposite(vertex, edge);
+            if (!discoveredVertices.contains(across)) {
+                forest.put(across, edge);
+                DFS(graph, across, discoveredVertices, forest);
+            }
+        }
+    }
+
+    public static <V, E> Map<Vertex<V>, Edge<E>> DFSComplete(Graph<V, E> graph) {
+        Set<Vertex<V>> discoveredVertices = new HashSet<>();
+        Map<Vertex<V>, Edge<E>> forest = new ProbeHashMap<>();
+        for (Vertex<V> vertex : graph.vertices())
+            if (!discoveredVertices.contains(vertex))
+                DFS(graph, vertex, discoveredVertices, forest);
+        return forest;
+    }
+
+    public static <V, E> void BFS(Graph<V, E> graph, Vertex<V> start,
+                                  Set<Vertex<V>> discoveredVertices,
+                                  Map<Vertex<V>, Edge<E>> forest) {
+        PositionalList<Vertex<V>> currentLevel = new LinkedPositionalList<>();
+        discoveredVertices.add(start);
+        currentLevel.addLast(start);
+        while (!currentLevel.isEmpty()) {
+            PositionalList<Vertex<V>> nextLevel = new LinkedPositionalList<>();
+            for (Vertex<V> vertex : currentLevel)
+                for (Edge<E> edge : graph.outgoingEdges(vertex)) {
+                    Vertex<V> across = graph.opposite(vertex, edge);
+                    if (!discoveredVertices.contains(across)) {
+                        discoveredVertices.add(across);
+                        forest.put(across, edge);
+                        nextLevel.addLast(across);
+                    }
+                }
+            currentLevel = nextLevel;
+        }
     }
 }
