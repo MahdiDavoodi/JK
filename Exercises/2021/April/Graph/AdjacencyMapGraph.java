@@ -1,6 +1,5 @@
 package Mahdi.Davoodi;
 
-import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
@@ -203,7 +202,7 @@ public class AdjacencyMapGraph<V, E> implements Graph<V, E> {
         }
     }
 
-    private InnerVertex<V> validate(Vertex<V> vertex) {
+    public InnerVertex<V> validate(Vertex<V> vertex) {
         if (!(vertex instanceof InnerVertex)) throw new IllegalArgumentException("Invalid vertex");
         return (InnerVertex<V>) vertex;
     }
@@ -311,5 +310,84 @@ public class AdjacencyMapGraph<V, E> implements Graph<V, E> {
             }
         }
         return result;
+    }
+
+    public <V, E> void nonRecursiveDFSPrint(Graph<V, E> graph) {
+
+        Stack<Vertex<V>> stack = new Stack<>();
+        Set<Vertex<V>> discoveredVertices = new HashSet<>();
+
+        stack.push((Vertex<V>) vertices.first().getElement());
+
+        while (!stack.empty()) {
+
+            Vertex<V> vertex = stack.pop();
+            if (discoveredVertices.contains(vertex)) continue;
+
+
+            discoveredVertices.add(vertex);
+            System.out.print(vertex.getElement() + " ");
+
+            for (Edge<E> edge :
+                    graph.outgoingEdges(vertex)) {
+                Vertex<V> across = graph.opposite(vertex, edge);
+                if (!discoveredVertices.contains(across)) {
+                    stack.push(across);
+                }
+            }
+        }
+    }
+
+    private int numberOfWays(Graph<V, E> graph,
+                             InnerVertex<V> start,
+                             InnerVertex<V> end,
+                             int counter) {
+
+        if (start == end) counter++;
+        else {
+            for (Edge<E> edge : graph.outgoingEdges(start)) {
+                InnerVertex<V> across = (InnerVertex<V>) graph.opposite(start, edge);
+                counter = numberOfWays(graph, across, end, counter);
+            }
+        }
+        return counter;
+    }
+
+
+    public int numberOfWays(Graph<V, E> graph, InnerVertex<V> start, InnerVertex<V> end) {
+        int numberOfWays = 0;
+        numberOfWays = numberOfWays(graph, start, end, numberOfWays);
+        return numberOfWays;
+    }
+
+    public boolean isThereACycle(Graph<V, E> graph) {
+        Set<Vertex<V>> discoveredVertices = new HashSet<>();
+
+        for (Vertex<V> vertex :
+                vertices) {
+            if (!discoveredVertices.contains(vertex))
+                if (isThereACycle(graph, vertex, discoveredVertices, vertex))
+                    return true;
+        }
+
+        return false;
+
+    }
+
+    private boolean isThereACycle(Graph<V, E> graph,
+                                  Vertex<V> vertex,
+                                  Set<Vertex<V>> discoveredVertices,
+                                  Vertex<V> before) {
+
+        discoveredVertices.add(vertex);
+
+        for (Edge<E> edge : graph.outgoingEdges(vertex)) {
+            Vertex<V> across = graph.opposite(vertex, edge);
+            if (!discoveredVertices.contains(across))
+                return isThereACycle(graph, across, discoveredVertices, vertex);
+            else if (across != before)
+                return true;
+        }
+        return false;
     }
 }
