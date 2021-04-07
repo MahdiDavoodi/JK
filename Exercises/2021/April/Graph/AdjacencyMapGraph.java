@@ -1,8 +1,6 @@
 package Mahdi.Davoodi;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 
 /*
  * My Graph - created with Hash Map.
@@ -390,4 +388,87 @@ public class AdjacencyMapGraph<V, E> implements Graph<V, E> {
         }
         return false;
     }
+
+    public  <V> Map<Vertex<V>, Integer>
+    shortestPathLengths(Graph<V, Integer> graph, Vertex<V> src) {
+        Map<Vertex<V>, Integer> d = new ProbeHashMap<>();
+        Map<Vertex<V>, Integer> cloud = new ProbeHashMap<>();
+
+        AdaptablePriorityQueue<Integer, Vertex<V>> pq = new HeapAdaptablePriorityQueue<>();
+
+        Map<Vertex<V>, Entry<Integer, Vertex<V>>> pqTokens = new ProbeHashMap<>();
+
+        for (Vertex<V> v : graph.vertices()) {
+            if (v == src)
+                d.put(v, 0);
+            else
+                d.put(v, Integer.MAX_VALUE);
+            pqTokens.put(v, pq.insert(d.get(v), v));
+        }
+
+        while (!pq.isEmpty()) {
+            Entry<Integer, Vertex<V>> entry = pq.removeMin();
+            int key = entry.getKey();
+            Vertex<V> u = entry.getValue();
+            cloud.put(u, key);
+            pqTokens.remove(u);
+            for (Edge<Integer> e : graph.outgoingEdges(u)) {
+                Vertex<V> v = graph.opposite(u, e);
+                if (cloud.get(v) == null) {
+
+                    int wgt = e.getElement();
+                    if (d.get(u) + wgt < d.get(v)) {
+                        d.put(v, d.get(u) + wgt);
+                        pq.replaceKey(pqTokens.get(v), d.get(v));
+                    }
+                }
+            }
+        }
+        return cloud;
+    }
+
+
+    public void minimumSpanningTree(Graph<V, Integer> graph) {
+
+        if (this.numberOfSpanningTrees(this) == 1) {
+
+            List<Edge<Integer>> tree = new LinkedList<>();
+
+            List<Edge<Integer>> notUsedEdges = new ArrayList<>();
+            for (Edge<Integer> edge :
+                    graph.edges()) {
+                notUsedEdges.add(edge);
+            }
+            notUsedEdges.sort(new Comparator<Edge<Integer>>() {
+                @Override
+                public int compare(Edge<Integer> o1, Edge<Integer> o2) {
+                    if (o1.getElement() == o2.getElement()) return 0;
+                    else if (o1.getElement() < o2.getElement()) return -1;
+                    else return 1;
+                    //   return o1.getElement().compareTo(o2.getElement());
+                }
+            });
+            Set<Vertex<V>> v_tree = new HashSet<>();
+            Set<Edge<Integer>> e_tree = new HashSet<>();
+            //java.util.Map<Vertex<V>, Vertex<V>> connectedVertices = new HashMap<>();
+            //ArrayList<Vertex<V>> connected1 = new ArrayList<>(),
+            //        connected2 = new ArrayList<>();
+
+
+            for (Edge<Integer> edge : notUsedEdges) {
+                Vertex<V>[] endPoints = graph.endVertices(edge);
+                if (v_tree.contains(endPoints[0]) && v_tree.contains(endPoints[1])) continue;
+                v_tree.add(endPoints[0]);
+                v_tree.add(endPoints[1]);
+                e_tree.add(edge);
+            }
+            for (Edge<Integer> e :
+                    e_tree) {
+                System.out.print(e.getElement() + ", ");
+            }
+        }
+
+
+    }
+
 }

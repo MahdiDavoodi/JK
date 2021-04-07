@@ -88,23 +88,4 @@ class AdjacencyMapGraphTest {
         addToGraph();
         assertTrue(graph.isThereACycle(graph));
     }
-
-    @Test
-    void numberOfWays() {
-        Vertex<String> istanbul = graph.insertVertex("Istanbul");
-        Vertex<String> newYork = graph.insertVertex("New York");
-        Vertex<String> tehran = graph.insertVertex("Tehran");
-        Vertex<String> berlin = graph.insertVertex("Berlin");
-        Vertex<String> tokyo = graph.insertVertex("Tokyo");
-        graph.insertEdge(istanbul, tehran, 20);
-        graph.insertEdge(istanbul, newYork, 150);
-        graph.insertEdge(istanbul, berlin, 30);
-        graph.insertEdge(newYork, tehran, 200);
-        graph.insertEdge(berlin, tehran, 40);
-        graph.insertEdge(tehran, tokyo, 130);
-
-        assertEquals(3, graph.numberOfWays(graph, graph.validate(istanbul), graph.validate(tokyo)));
-    }
-
-
 }

@@ -18,6 +18,13 @@ public class Test {
         graph.insertEdge(tehran, tokyo, 130);
 
         graph.nonRecursiveDFSPrint(graph);
-
+        System.out.println();
+        graph.minimumSpanningTree(graph);
+        System.out.println();
+        Map<Vertex<String>, Integer> map = graph.shortestPathLengths(graph, istanbul);
+        for (Vertex<String> vertex :
+                map.keySet()) {
+            System.out.print("---> To " + vertex.getElement() + " in " + map.get(vertex) + ". ");
+        }
     }
 }
