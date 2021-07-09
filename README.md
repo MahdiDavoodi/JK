@@ -1,2 +1,2 @@
 # Java
-My Java codes and projects(2020 - ).
+My Java codes and projects(2020- ).
