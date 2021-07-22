@@ -1,2 +1,2 @@
-# Java
-My Java codes and projects(2020- ).
+# Java & Kotlin
+My Java/Kotlin codes and projects(2020- ).
