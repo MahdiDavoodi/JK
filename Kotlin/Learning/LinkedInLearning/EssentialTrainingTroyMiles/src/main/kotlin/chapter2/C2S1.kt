@@ -13,6 +13,7 @@ fun main() {
     var phonePrice = 1235.56F
     println("---> Phone A has a price of: $phonePrice")
 
-    phonePrice = 3425.8F
-    println("---> Phone B has a price of: $phonePrice")
+    phonePrice = 3425F
+    val phonePriceToInt = phonePrice.toInt()
+    println("---> Phone B has a price of: $phonePriceToInt")
 }
