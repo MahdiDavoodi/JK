@@ -35,5 +35,5 @@ fun main() {
     //For loop on string
     for (letter in sampleString)
         print("$letter-")
-    
+
 }
