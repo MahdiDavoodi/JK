@@ -1,0 +1,14 @@
+- August 21, 2021
+There is a big danger with coroutines. What happens when a long-running task, never ends?
+
+Sometimes we are dealing with a task that takes much time to finish. In this case, if this task won't complete, It can affect our UI to freeze.
+
+We have two ways to control this situation in coroutines.
+
+Let them time out:
+We can use timeOut functions to make sure the task will finish at a particular time. Otherwise, we get null or an exception for the result and we won't wait for the task to finish.
+
+Cancel them:
+In this case, our code must wait for the cancellation request and exit the code once it is received. We can use launch { } for an action and use its "isActive" property. And then, we can use ".cancelAndJoin()" to cancel the job.
+
+Take a look at the time out example: (I prefer time out over canceling because it's more straightforward.)
