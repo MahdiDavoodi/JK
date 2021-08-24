@@ -19,11 +19,7 @@ fun main() {
 }
 
 // We have to check if they have compareTo method or not.
-// The string compareTo does not compare length.
 fun <V : Comparable<V>> smaller(A: V, B: V): V {
-    if (A is String && B is String)
-        return if (A.length > B.length) B
-        else A
     return if (A > B)
         B
     else A
