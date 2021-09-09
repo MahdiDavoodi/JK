@@ -1,2 +1,4 @@
 # Java & Kotlin
-My Java/Kotlin codes and projects(2020- ).
+My Java/Kotlin codes and projects.
+
+Created: September 2020.
